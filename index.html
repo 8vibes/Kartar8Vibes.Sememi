@@ -188,13 +188,8 @@
                         const normalizedData = {
                             ...DEFAULT_DATA,
                             ...val,
-                            profile: { 
-                                ...DEFAULT_DATA.profile, 
-                                ...val.profile,
-                                socials: { ...DEFAULT_DATA.profile.socials, ...(val.profile && val.profile.socials) }
-                            },
+                            profile: { ...DEFAULT_DATA.profile, ...val.profile },
                             donation: { ...DEFAULT_DATA.donation, ...val.donation },
-                            structure: val.structure || DEFAULT_DATA.structure,
                             feedbacks: val.feedbacks || [],
                             members: val.members || [],
                             news: val.news || [],
@@ -270,6 +265,7 @@
 
             return (
                 <div className="min-h-screen flex flex-col bg-white">
+                    {}
                     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-red-100 shadow-sm">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setViewMode('public')}>
@@ -345,26 +341,18 @@
                                                 
                                                 {/* Social Media Links */}
                                                 <div className="pt-2 flex items-center justify-center lg:justify-start gap-3">
-                                                    {data.profile.socials.instagram && (
-                                                        <a href={data.profile.socials.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
-                                                            <i className="fa-brands fa-instagram"></i>
-                                                        </a>
-                                                    )}
-                                                    {data.profile.socials.tiktok && (
-                                                        <a href={data.profile.socials.tiktok} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
-                                                            <i className="fa-brands fa-tiktok"></i>
-                                                        </a>
-                                                    )}
-                                                    {data.profile.socials.youtube && (
-                                                        <a href={data.profile.socials.youtube} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
-                                                            <i className="fa-brands fa-youtube"></i>
-                                                        </a>
-                                                    )}
-                                                    {data.profile.socials.whatsapp && (
-                                                        <a href={data.profile.socials.whatsapp} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
-                                                            <i className="fa-brands fa-whatsapp"></i>
-                                                        </a>
-                                                    )}
+                                                    <a href={data.profile.socials.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-instagram"></i>
+                                                    </a>
+                                                    <a href={data.profile.socials.tiktok} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-tiktok"></i>
+                                                    </a>
+                                                    <a href={data.profile.socials.youtube} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-youtube"></i>
+                                                    </a>
+                                                    <a href={data.profile.socials.whatsapp} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-whatsapp"></i>
+                                                    </a>
                                                 </div>
 
                                                 <div className="pt-4 flex flex-wrap justify-center lg:justify-start gap-4">
@@ -603,7 +591,7 @@
                                                     </div>
 
                                                     <a 
-                                                        href={data.profile.socials.whatsapp || 'https://wa.me/6281234567890'}
+                                                        href={`https://wa.me/6281234567890?text=Halo%20Pengurus%20Kartar%208Vibes,%20saya%20sudah%20melakukan%20donasi%20melalui%20DANA.`}
                                                         target="_blank"
                                                         rel="noreferrer"
                                                         className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-3 rounded-xl text-sm transition shadow"
@@ -764,6 +752,7 @@
                                             className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
                                             autoFocus
                                         />
+                                        <span className="text-[10px] text-gray-400 mt-1 block">* Password default: <code className="bg-gray-100 px-1 rounded text-red-600">gak ngerti</code></span>
                                     </div>
 
                                     <div className="flex gap-3 pt-2">
@@ -811,7 +800,6 @@
             const [activeTab, setActiveTab] = useState('profile');
 
             // Form Temp States for Admin Modals / Adding
-            const [newStructure, setNewStructure] = useState({ title: '', name: '', role: '' });
             const [newMember, setNewMember] = useState({ name: '', position: '', status: 'Aktif', photo: '', phone: '' });
             const [newNews, setNewNews] = useState({ title: '', category: 'Kegiatan RT', date: '', author: 'Admin Kartar', summary: '', content: '', image: '' });
             const [newGallery, setNewGallery] = useState({ title: '', category: 'Acara Warga', date: '', url: '' });
@@ -835,51 +823,15 @@
                 }
             };
 
-            // Handlers Profile, Sosial Media & Donasi Update
+            // Handlers Profile & Donasi Update
             const handleUpdateProfile = async (e) => {
                 e.preventDefault();
-                await saveFirebaseNode('kartar_data/profile', data.profile, 'Profil & Sosial Media berhasil diperbarui secara Real-Time!');
+                await saveFirebaseNode('kartar_data/profile', data.profile, 'Profil berhasil diperbarui secara Real-Time!');
             };
 
             const handleUpdateDonation = async (e) => {
                 e.preventDefault();
-                await saveFirebaseNode('kartar_data/donation', data.donation, 'Info Donasi & QRIS berhasil disimpan!');
-            };
-
-            // Structure CRUD
-            const handleAddStructure = async (e) => {
-                e.preventDefault();
-                if (!newStructure.title || !newStructure.name) return;
-                const updated = [
-                    ...(data.structure || []),
-                    {
-                        id: 's_' + Date.now(),
-                        ...newStructure
-                    }
-                ];
-                if (await saveFirebaseNode('kartar_data/structure', updated)) {
-                    setData(prevData => ({ ...prevData, structure: updated }));
-                    setNewStructure({ title: '', name: '', role: '' });
-                }
-            };
-
-            const handleUpdateStructureItem = async (index, field, value) => {
-                const updated = [...(data.structure || [])];
-                updated[index][field] = value;
-                setData(prevData => ({ ...prevData, structure: updated }));
-            };
-
-            const handleSaveStructureList = async () => {
-                await saveFirebaseNode('kartar_data/structure', data.structure, 'Bagan Kepengurusan berhasil disimpan!');
-            };
-
-            const handleDeleteStructure = async (id) => {
-                if (window.confirm('Hapus jabatan/posisi ini dari bagan kepengurusan?')) {
-                    const updated = data.structure.filter(s => s.id !== id);
-                    if (await saveFirebaseNode('kartar_data/structure', updated)) {
-                        setData(prevData => ({ ...prevData, structure: updated }));
-                    }
-                }
+                await saveFirebaseNode('kartar_data/donation', data.donation, 'Info Donasi berhasil disimpan!');
             };
 
             // Member CRUD
@@ -992,12 +944,11 @@
                         {/* CMS Navigation Tabs */}
                         <div className="flex overflow-x-auto custom-scrollbar gap-2 mb-6 pb-2">
                             {[
-                                { id: 'profile', label: 'Profil & Sosmed', icon: 'fa-id-card' },
-                                { id: 'structure', label: 'Bagan Kepengurusan', icon: 'fa-sitemap' },
+                                { id: 'profile', label: 'Profil & Sambutan', icon: 'fa-id-card' },
                                 { id: 'members', label: 'Anggota Resmi', icon: 'fa-users' },
                                 { id: 'news', label: 'Kelola Berita', icon: 'fa-newspaper' },
                                 { id: 'gallery', label: 'Kelola Galeri', icon: 'fa-images' },
-                                { id: 'donation', label: 'QRIS & Donasi', icon: 'fa-qrcode' },
+                                { id: 'donation', label: 'Akun DANA', icon: 'fa-wallet' },
                                 { id: 'feedbacks', label: 'Masukan Warga', icon: 'fa-comments' }
                             ].map((tab) => (
                                 <button
@@ -1017,8 +968,7 @@
 
                         {/* TAB CONTENTS */}
                         <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm">
-                            
-                            {/* TAB 1: PROFIL & SOSIAL MEDIA */}
+                            {/* TAB 1: PROFIL & SAMBUTAN */}
                             {activeTab === 'profile' && (
                                 <form onSubmit={handleUpdateProfile} className="space-y-6 max-w-3xl">
                                     <h3 className="font-bold text-lg text-gray-900 border-b pb-3">Edit Sambutan Ketua & Informasi Web</h3>
@@ -1057,4 +1007,288 @@
                                                 type="text" 
                                                 value={data.profile.ketuaPhoto}
                                                 onChange={(e) => setData({...data, profile: {...data.profile, ketuaPhoto: e.target.value}})}
-                                                className="w-full px-4
+                                                className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Teks Sambutan Pembuka</label>
+                                        <textarea 
+                                            rows="4"
+                                            value={data.profile.welcomeMessage}
+                                            onChange={(e) => setData({...data, profile: {...data.profile, welcomeMessage: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        ></textarea>
+                                    </div>
+
+                                    <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
+                                        Simpan Perubahan
+                                    </button>
+                                </form>
+                            )}
+
+                            {/* TAB 2: ANGGOTA RESMI */}
+                            {activeTab === 'members' && (
+                                <div className="space-y-8">
+                                    <form onSubmit={handleAddMember} className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                                        <h4 className="font-bold text-sm text-gray-900">Tambah Anggota Resmi Baru</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Nama Lengkap *" 
+                                                required
+                                                value={newMember.name}
+                                                onChange={(e) => setNewMember({...newMember, name: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="Jabatan *" 
+                                                required
+                                                value={newMember.position}
+                                                onChange={(e) => setNewMember({...newMember, position: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="URL Foto (Opsional)" 
+                                                value={newMember.photo}
+                                                onChange={(e) => setNewMember({...newMember, photo: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                        </div>
+                                        <button type="submit" className="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow">
+                                            <i className="fa-solid fa-plus mr-1"></i> Tambah Anggota
+                                        </button>
+                                    </form>
+
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-xs">
+                                            <thead className="bg-gray-100 text-gray-700 uppercase">
+                                                <tr>
+                                                    <th className="p-3">Foto</th>
+                                                    <th className="p-3">Nama</th>
+                                                    <th className="p-3">Jabatan</th>
+                                                    <th className="p-3">Status</th>
+                                                    <th className="p-3 text-right">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-200">
+                                                {data.members.map((m) => (
+                                                    <tr key={m.id} className="hover:bg-gray-50">
+                                                        <td className="p-3">
+                                                            <img src={m.photo} alt={m.name} className="w-8 h-8 rounded-full object-cover" />
+                                                        </td>
+                                                        <td className="p-3 font-bold">{m.name}</td>
+                                                        <td className="p-3 text-gray-600">{m.position}</td>
+                                                        <td className="p-3"><span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">{m.status}</span></td>
+                                                        <td className="p-3 text-right">
+                                                            <button onClick={() => handleDeleteMember(m.id)} className="text-red-600 hover:text-red-800 font-bold">
+                                                                Hapus
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 3: KELOLA BERITA */}
+                            {activeTab === 'news' && (
+                                <div className="space-y-8">
+                                    <form onSubmit={handleAddNews} className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                                        <h4 className="font-bold text-sm text-gray-900">Tambah Artikel Berita Baru</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Judul Berita *" 
+                                                required
+                                                value={newNews.title}
+                                                onChange={(e) => setNewNews({...newNews, title: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <select 
+                                                value={newNews.category}
+                                                onChange={(e) => setNewNews({...newNews, category: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            >
+                                                <option value="Kegiatan RT">Kegiatan RT</option>
+                                                <option value="Kegiatan Kartar">Kegiatan Kartar</option>
+                                                <option value="Pengumuman Warga">Pengumuman Warga</option>
+                                            </select>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Ringkasan Singkat" 
+                                                value={newNews.summary}
+                                                onChange={(e) => setNewNews({...newNews, summary: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="URL Gambar Berita" 
+                                                value={newNews.image}
+                                                onChange={(e) => setNewNews({...newNews, image: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                        </div>
+                                        <textarea 
+                                            rows="3" 
+                                            placeholder="Isi Berita Lengkap *" 
+                                            required
+                                            value={newNews.content}
+                                            onChange={(e) => setNewNews({...newNews, content: e.target.value})}
+                                            className="w-full px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                        ></textarea>
+                                        <button type="submit" className="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow">
+                                            <i className="fa-solid fa-plus mr-1"></i> Publikasikan Berita
+                                        </button>
+                                    </form>
+
+                                    <div className="space-y-3">
+                                        {data.news.map((n) => (
+                                            <div key={n.id} className="p-4 border rounded-2xl flex justify-between items-center bg-white shadow-sm">
+                                                <div className="flex items-center gap-4">
+                                                    <img src={n.image} alt={n.title} className="w-12 h-12 rounded-xl object-cover" />
+                                                    <div>
+                                                        <h5 className="font-bold text-xs text-gray-900">{n.title}</h5>
+                                                        <span className="text-[10px] text-gray-500">{n.category} • {n.date}</span>
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => handleDeleteNews(n.id)} className="text-red-600 text-xs font-bold hover:underline">
+                                                    Hapus
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 4: KELOLA GALERI */}
+                            {activeTab === 'gallery' && (
+                                <div className="space-y-8">
+                                    <form onSubmit={handleAddGallery} className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                                        <h4 className="font-bold text-sm text-gray-900">Tambah Foto Dokumentasi</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Judul / Momen Foto *" 
+                                                required
+                                                value={newGallery.title}
+                                                onChange={(e) => setNewGallery({...newGallery, title: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="Kategori (cth: Acara Warga)" 
+                                                value={newGallery.category}
+                                                onChange={(e) => setNewGallery({...newGallery, category: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="URL Image *" 
+                                                required
+                                                value={newGallery.url}
+                                                onChange={(e) => setNewGallery({...newGallery, url: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                        </div>
+                                        <button type="submit" className="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow">
+                                            <i className="fa-solid fa-plus mr-1"></i> Upload Foto
+                                        </button>
+                                    </form>
+
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                        {data.gallery.map((g) => (
+                                            <div key={g.id} className="relative group border rounded-2xl overflow-hidden bg-gray-100">
+                                                <img src={g.url} alt={g.title} className="w-full h-32 object-cover" />
+                                                <div className="p-2 text-[11px] font-bold truncate">{g.title}</div>
+                                                <button 
+                                                    onClick={() => handleDeleteGallery(g.id)}
+                                                    className="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow"
+                                                >
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 5: AKUN DONASI */}
+                            {activeTab === 'donation' && (
+                                <form onSubmit={handleUpdateDonation} className="space-y-4 max-w-2xl">
+                                    <h3 className="font-bold text-lg text-gray-900 border-b pb-3">Edit Informasi Rekening DANA</h3>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Nomor Akun DANA</label>
+                                        <input 
+                                            type="text" 
+                                            value={data.donation.accountNumber}
+                                            onChange={(e) => setData({...data, donation: {...data.donation, accountNumber: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Atas Nama Pemilik DANA</label>
+                                        <input 
+                                            type="text" 
+                                            value={data.donation.accountName}
+                                            onChange={(e) => setData({...data, donation: {...data.donation, accountName: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Catatan Himbauan Donasi</label>
+                                        <textarea 
+                                            rows="3"
+                                            value={data.donation.note}
+                                            onChange={(e) => setData({...data, donation: {...data.donation, note: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        ></textarea>
+                                    </div>
+                                    <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
+                                        Simpan Informasi Donasi
+                                    </button>
+                                </form>
+                            )}
+
+                            {/* TAB 6: MASUKAN WARGA */}
+                            {activeTab === 'feedbacks' && (
+                                <div className="space-y-4">
+                                    <h3 className="font-bold text-lg text-gray-900 border-b pb-3">Daftar Masukan / Saran Masuk dari Warga</h3>
+                                    {data.feedbacks.length === 0 ? (
+                                        <p className="text-xs text-gray-500 italic">Belum ada saran atau masukan dari warga.</p>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            {data.feedbacks.map((fb) => (
+                                                <div key={fb.id} className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex justify-between items-start gap-4">
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold text-xs text-gray-900">{fb.name}</span>
+                                                            <span className="text-[10px] text-gray-400">• {fb.date} • WA: {fb.phone}</span>
+                                                        </div>
+                                                        <p className="text-xs text-gray-700 italic">"{fb.text}"</p>
+                                                    </div>
+                                                    <button onClick={() => handleDeleteFeedback(fb.id)} className="text-red-600 hover:text-red-800 text-xs font-bold">
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
