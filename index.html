@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karang Taruna 8Vibes Sememi - RT 08 Sememi</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#fef2f2',
+                            100: '#ffe1e1',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    <!-- Babel -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script> 
+    <style></style>   
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #ffffff;
+            color: #1f2937;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #f87171;
+            border-radius: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+            background: #dc2626;
+        }
+    </style>
+</head>
+<body class="bg-white text-gray-800 antialiased selection:bg-red-500 selection:text-white">
+
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+        const firebaseConfig = {
+        apiKey: "AIzaSyDgMHP8MdN_41O5qKFHU1TflDtms4w8FEQ",
+        authDomain: "kartar8vibes-5fbb6.firebaseapp.com",
+        databaseURL: "https://kartar8vibes-5fbb6-default-rtdb.firebaseio.com/",
+        projectId: "kartar8vibes-5fbb6",
+        storageBucket: "kartar8vibes-5fbb6.firebasestorage.app",
+        messagingSenderId: "595506732334",
+        appId: "1:595506732334:web:0eab64ac1506edf851eebf"
+       };
+       if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+       }
+       const db = firebase.database();
+
+        const DEFAULT_DATA = {
+            profile: {
+                title: "Karang Taruna 8Vibes Sememi",
+                subTitle: "Semangat Kepemudaan & Kebersamaan Warga RT 08 Sememi",
+                ketuaName: "Rizky Pratama",
+                ketuaTitle: "Ketua Karang Taruna 8Vibes",
+                ketuaPhoto: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=400",
+                welcomeMessage: "Selamat datang di Portal Resmi Karang Taruna 8Vibes Sememi RT 08. Kami hadir sebagai wadah kreativitas, kepedulian sosial, dan pemersatu seluruh pemuda serta warga RT 08 Sememi. Mari bersama-sama membangun lingkungan yang harmonis, aktif, dan berdaya saing tinggi!",
+                socials: {
+                    instagram: "https://instagram.com",
+                    tiktok: "https://tiktok.com",
+                    youtube: "https://youtube.com",
+                    whatsapp: "https://wa.me/6281234567890"
+                }
+            },
+            structure: [
+                { id: "1", title: "Pelindung", name: "Bpk. H. Ahmad Sugeng", role: "Ketua RT 08 Sememi" },
+                { id: "2", title: "Penasehat", name: "Bpk. Bambang Wijaya", role: "Tokoh Masyarakat" },
+                { id: "3", title: "Ketua Kartar", name: "Rizky Pratama", role: "Koordinator Utama" },
+                { id: "4", title: "Wakil Ketua", name: "Dinda Lestari", role: "Pendamping Operasional" },
+                { id: "5", title: "Sekretaris", name: "Siti Rahmawati", role: "Administrasi & Kebijakan" },
+                { id: "6", title: "Bendahara", name: "Bagus Setiawan", role: "Keuangan & Alokasi Dana" }
+            ],
+            members: [
+                { id: "m1", name: "Rizky Pratama", position: "Ketua Umum", status: "Aktif", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200", phone: "081234567890" },
+                { id: "m2", name: "Dinda Lestari", position: "Wakil Ketua", status: "Aktif", photo: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&q=80&w=200", phone: "081234567891" },
+                { id: "m3", name: "Siti Rahmawati", position: "Sekretaris", status: "Aktif", photo: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?auto=format&fit=crop&q=80&w=200", phone: "081234567892" },
+                { id: "m4", name: "Bagus Setiawan", position: "Bendahara", status: "Aktif", photo: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=200", phone: "081234567893" },
+                { id: "m5", name: "Fajar Nugraha", position: "Seksi Olahraga & Seni", status: "Aktif", photo: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&q=80&w=200", phone: "081234567894" },
+                { id: "m6", name: "Anisa Putri", position: "Seksi Humas & Media", status: "Aktif", photo: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&q=80&w=200", phone: "081234567895" }
+            ],
+            news: [
+                {
+                    id: "n1",
+                    title: "Kerja Bakti Masif Sambut Musim Hujan Warga RT 08 Sememi",
+                    category: "Kegiatan RT",
+                    date: "02 Oktober 2026",
+                    author: "Humas RT 08",
+                    summary: "Seluruh warga RT 08 Sememi antusias membersihkan saluran air dan lingkungan demi mencegah banjir.",
+                    content: "Kerja bakti serentak dilaksanakan pada Minggu pagi diikuti oleh bapak-bapak, ibu-ibu, serta pemuda Karang Taruna 8Vibes. Fokus kegiatan meliputi pembersihan selokan utama, pemangkasan dahan pohon yang membahayakan, dan pengumpulan sampah daur ulang. Kegiatan diakhiri dengan makan bersama khas warga RT 08.",
+                    image: "https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=600"
+                },
+                {
+                    id: "n2",
+                    title: "Turnamen Bulutangkis Antar Pemuda 8Vibes Sukses Gelar",
+                    category: "Kegiatan Kartar",
+                    date: "25 September 2026",
+                    author: "Seksi Olahraga",
+                    summary: "Kompetisi sengit dan penuh keakraban berlangsung di lapangan warga RT 08 Sememi.",
+                    content: "Turnamen bulutangkis internal 8Vibes sukses dilaksanakan selama dua hari. Kegiatan ini bertujuan mempererat tali silaturahmi antar pemuda Sememi serta menjaring bakat-bakat muda di bidang olahraga badminton.",
+                    image: "https://images.unsplash.com/photo-1626224583764-f87db24ac4ea?auto=format&fit=crop&q=80&w=600"
+                },
+                {
+                    id: "n3",
+                    title: "Pengumuman Pembayaran Iuran & Jadwal Ronda Malam Baru",
+                    category: "Pengumuman Warga",
+                    date: "15 September 2026",
+                    author: "Pengurus RT 08",
+                    summary: "Jadwal poskamling terbaru berlaku mulai pekan depan untuk menjaga keamanan lingkungan.",
+                    content: "Dihimbau kepada seluruh kepala keluarga RT 08 Sememi untuk memperhatikan jadwal poskamling terbaru yang telah disebarkan. Pemuda Kartar 8Vibes juga akan mendampingi jadwal ronda malam pada hari libur.",
+                    image: "https://images.unsplash.com/photo-1577495508048-b635879837f1?auto=format&fit=crop&q=80&w=600"
+                }
+            ],
+            gallery: [
+                { id: "g1", title: "Peringatan HUT RI Ke-81 RT 08", category: "Acara Warga", date: "17 Agustus 2026", url: "https://images.unsplash.com/photo-1530103862676-de8c9debad1d?auto=format&fit=crop&q=80&w=600" },
+                { id: "g2", title: "Malam Keakraban Pemuda 8Vibes", category: "Internal Kartar", date: "05 September 2026", url: "https://images.unsplash.com/photo-1511632765486-a01980e01a18?auto=format&fit=crop&q=80&w=600" },
+                { id: "g3", title: "Bakti Sosial Pembagian Sembako", category: "Sosial", date: "10 Agustus 2026", url: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?auto=format&fit=crop&q=80&w=600" },
+                { id: "g4", title: "Pelatihan Keterampilan Digital Pemuda", category: "Edukasi", date: "20 Juli 2026", url: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&q=80&w=600" }
+            ],
+            donation: {
+                accountName: "Karang Taruna 8Vibes Sememi",
+                accountNumber: "0812-3456-7890",
+                note: "Gunakan fitur DANA ini untuk berpartisipasi dalam program kebersihan, sosial, dan kegiatan pemuda RT 08 Sememi.",
+                qrisUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DANA-8VIBES-SEMEMI-RT08"
+            },
+            feedbacks: [
+                { id: "fb1", name: "Bpk. Mulyono", phone: "081399881122", text: "Mohon untuk kegiatan olahraga malam suara musik dibatasi sampai jam 10 malam ya dek, terima kasih.", date: "01 Oktober 2026" },
+                { id: "fb2", name: "Anonim", phone: "-", text: "Semangat terus Karang Taruna 8Vibes! Acara 17an kemarin sangat meriah!", date: "20 Agustus 2026" }
+            ]
+        };
+
+        function App() {
+            const [data, setData] = useState(DEFAULT_DATA);
+
+            const [viewMode, setViewMode] = useState('public'); // 'public' | 'admin'
+            const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(false);
+            const [showAdminLoginModal, setShowAdminLoginModal] = useState(false);
+            const [adminPasswordInput, setAdminPasswordInput] = useState('');
+            const [loginError, setLoginError] = useState('');
+
+            // Modals & Active Filters
+            const [selectedNews, setSelectedNews] = useState(null);
+            const [selectedImage, setSelectedImage] = useState(null);
+            const [newsCategory, setNewsCategory] = useState('Semua');
+            const [galleryCategory, setGalleryCategory] = useState('Semua');
+            const [searchMember, setSearchMember] = useState('');
+
+            // Feedback Form State
+            const [feedbackInput, setFeedbackInput] = useState({ name: '', phone: '', message: '' });
+            const [feedbackSuccess, setFeedbackSuccess] = useState(false);
+
+            useEffect(() => {
+                const dataRef = db.ref('kartar_data');
+
+                const handleValue = (snapshot) => {
+                    const val = snapshot.val();
+                    if (val) {
+                        const normalizedData = {
+                            ...val,
+                            feedbacks: val.feedbacks || [],
+                            members: val.members || [],
+                            news: val.news || [],
+                            gallery: val.gallery || []
+                        };
+                        setData(normalizedData);
+                    } else {
+                        dataRef.set(DEFAULT_DATA).catch((error) => {
+                            console.error('Gagal menginisialisasi data Firebase:', error);
+                        });
+                    }
+                };
+
+                const handleError = (error) => {
+                    console.error('Gagal membaca data Firebase:', error);
+                };
+
+                dataRef.on('value', handleValue, handleError);
+                return () => dataRef.off('value', handleValue);
+            }, []);
+
+            // Login Admin Handler
+            const handleAdminLogin = (e) => {
+                e.preventDefault();
+                if (adminPasswordInput === 'admin123' || adminPasswordInput === '8vibes') {
+                    setIsAdminLoggedIn(true);
+                    setViewMode('admin');
+                    setShowAdminLoginModal(false);
+                    setAdminPasswordInput('');
+                    setLoginError('');
+                } else {
+                    setLoginError('Password salah! (Gunakan: admin123)');
+                }
+            };
+
+            // Form Feedback Submission
+            const handleSendFeedback = async (e) => {
+                e.preventDefault();
+                if (!feedbackInput.message.trim()) return;
+
+                const newFeedback = {
+                    id: 'fb_' + Date.now(),
+                    name: feedbackInput.name.trim() || 'Anonim',
+                    phone: feedbackInput.phone.trim() || '-',
+                    text: feedbackInput.message.trim(),
+                    date: new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+                };
+
+                const updatedFeedbacks = [newFeedback, ...(data.feedbacks || [])];
+                try {
+                    await db.ref('kartar_data/feedbacks').set(updatedFeedbacks);
+                } catch (error) {
+                    console.error('Gagal mengirim saran ke Firebase:', error);
+                    window.alert('Saran gagal dikirim. Silakan coba lagi.');
+                    return;
+                }
+
+                setFeedbackInput({ name: '', phone: '', message: '' });
+                setFeedbackSuccess(true);
+                setTimeout(() => setFeedbackSuccess(false), 4000);
+            };
+
+            // Filtered Items
+            const filteredMembers = data.members.filter(m => 
+                m.name.toLowerCase().includes(searchMember.toLowerCase()) || 
+                m.position.toLowerCase().includes(searchMember.toLowerCase())
+            );
+
+            const filteredNews = newsCategory === 'Semua' 
+                ? data.news 
+                : data.news.filter(n => n.category === newsCategory);
+
+            const filteredGallery = galleryCategory === 'Semua' 
+                ? data.gallery 
+                : data.gallery.filter(g => g.category === galleryCategory);
+
+            return (
+                <div className="min-h-screen flex flex-col bg-white">
+                    {}
+                    <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-red-100 shadow-sm">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                            <div className="flex items-center gap-3 cursor-pointer" onClick={() => setViewMode('public')}>
+                                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-red-600 to-red-500 flex items-center justify-center text-white font-black text-xl shadow-md border-2 border-white">
+                                    8V
+                                </div>
+                                <div>
+                                    <h1 className="font-extrabold text-lg sm:text-xl text-gray-900 leading-tight">
+                                        8VIBES <span className="text-red-600">SEMEMI</span>
+                                    </h1>
+                                    <p className="text-xs text-red-600 font-semibold tracking-wide uppercase">
+                                        Karang Taruna RT 08 Sememi
+                                    </p>
+                                </div>
+                            </div>
+
+                            <nav className="hidden md:flex items-center gap-6 text-sm font-medium text-gray-700">
+                                {viewMode === 'public' ? (
+                                    <>
+                                        <a href="#sambutan" className="hover:text-red-600 transition">Sambutan</a>
+                                        <a href="#struktur" className="hover:text-red-600 transition">Struktur</a>
+                                        <a href="#berita" className="hover:text-red-600 transition">Berita</a>
+                                        <a href="#galeri" className="hover:text-red-600 transition">Galeri</a>
+                                        <a href="#donasi" className="hover:text-red-600 transition">Donasi</a>
+                                        <a href="#saran" className="hover:text-red-600 transition">Saran Warga</a>
+                                    </>
+                                ) : (
+                                    <span className="bg-red-100 text-red-700 px-3 py-1 rounded-full text-xs font-bold">
+                                        <i className="fa-solid fa-user-shield mr-1.5"></i> Mode Admin Dashboard
+                                    </span>
+                                )}
+                            </nav>
+
+                            <div className="flex items-center gap-3">
+                                {viewMode === 'public' ? (
+                                    <button 
+                                        onClick={() => isAdminLoggedIn ? setViewMode('admin') : setShowAdminLoginModal(true)}
+                                        className="bg-gray-100 hover:bg-red-50 text-gray-800 hover:text-red-600 font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm border border-gray-200 transition flex items-center gap-2"
+                                    >
+                                        <i className="fa-solid fa-lock text-red-600"></i>
+                                        {isAdminLoggedIn ? 'Panel Admin' : 'Login Admin'}
+                                    </button>
+                                ) : (
+                                    <button 
+                                        onClick={() => setViewMode('public')}
+                                        className="bg-red-600 hover:bg-red-700 text-white font-semibold px-4 py-2 rounded-xl text-xs sm:text-sm shadow transition flex items-center gap-2"
+                                    >
+                                        <i className="fa-solid fa-globe"></i> Lihat Web Utama
+                                    </button>
+                                )}
+                            </div>
+                        </div>
+                    </header>
+
+                    {/* MAIN CONTENT AREA */}
+                    <main className="flex-grow">
+                        {viewMode === 'public' ? (
+                            <div>
+                                {/* HERO SECTION */}
+                                <section className="relative py-16 sm:py-24 bg-gradient-to-b from-red-50/50 via-white to-white overflow-hidden">
+                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                                            <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
+                                                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-red-100 text-red-700 text-xs font-bold uppercase tracking-wider">
+                                                    <i className="fa-solid fa-heart-pulse"></i> Pemuda Kreatif RT 08 Sememi
+                                                </div>
+                                                <h2 className="text-3xl sm:text-5xl font-black text-gray-900 tracking-tight leading-tight">
+                                                    {data.profile.title}
+                                                </h2>
+                                                <p className="text-lg text-gray-600 font-medium">
+                                                    {data.profile.subTitle}
+                                                </p>
+                                                
+                                                {/* Social Media Links */}
+                                                <div className="pt-2 flex items-center justify-center lg:justify-start gap-3">
+                                                    <a href={data.profile.socials.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-instagram"></i>
+                                                    </a>
+                                                    <a href={data.profile.socials.tiktok} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-tiktok"></i>
+                                                    </a>
+                                                    <a href={data.profile.socials.youtube} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-youtube"></i>
+                                                    </a>
+                                                    <a href={data.profile.socials.whatsapp} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-red-100 text-red-600 hover:bg-red-600 hover:text-white transition flex items-center justify-center text-lg">
+                                                        <i className="fa-brands fa-whatsapp"></i>
+                                                    </a>
+                                                </div>
+
+                                                <div className="pt-4 flex flex-wrap justify-center lg:justify-start gap-4">
+                                                    <a href="#berita" className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-3.5 rounded-xl shadow-lg shadow-red-200 transition">
+                                                        <i className="fa-solid fa-newspaper mr-2"></i> Update Kegiatan
+                                                    </a>
+                                                    <a href="#donasi" className="bg-white hover:bg-gray-50 text-red-600 font-bold px-6 py-3.5 rounded-xl border-2 border-red-200 shadow-sm transition">
+                                                        <i className="fa-solid fa-hand-holding-dollar mr-2"></i> Donasi DANA
+                                                    </a>
+                                                </div>
+                                            </div>
+
+                                            {/* SAMBUTAN KETUA KARTAR */}
+                                            <div id="sambutan" className="lg:col-span-5">
+                                                <div className="bg-white p-6 sm:p-8 rounded-3xl border border-red-100 shadow-xl relative">
+                                                    <div className="absolute -top-4 -right-4 bg-red-600 text-white w-10 h-10 rounded-2xl flex items-center justify-center text-xl shadow-md">
+                                                        <i className="fa-solid fa-quote-right"></i>
+                                                    </div>
+                                                    <div className="flex items-center gap-4 mb-6">
+                                                        <img 
+                                                            src={data.profile.ketuaPhoto} 
+                                                            alt={data.profile.ketuaName} 
+                                                            className="w-16 h-16 rounded-full object-cover border-2 border-red-500 shadow"
+                                                            onError={(e) => { e.target.src = 'https://placehold.co/100x100/ef4444/ffffff?text=Ketua'; }}
+                                                        />
+                                                        <div>
+                                                            <h3 className="font-bold text-gray-900 text-lg leading-tight">{data.profile.ketuaName}</h3>
+                                                            <p className="text-xs text-red-600 font-semibold">{data.profile.ketuaTitle}</p>
+                                                        </div>
+                                                    </div>
+                                                    <p className="text-gray-600 italic text-sm leading-relaxed">
+                                                        "{data.profile.welcomeMessage}"
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* STRUKTUR & ANGGOTA RESMI */}
+                                <section id="struktur" className="py-16 bg-gray-50">
+                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                        <div className="text-center max-w-3xl mx-auto mb-12">
+                                            <h2 className="text-2xl sm:text-4xl font-extrabold text-gray-900">
+                                                Struktur Organisasi & Anggota Resmi
+                                            </h2>
+                                            <p className="text-gray-600 mt-2 text-sm sm:text-base">
+                                                Bagan kepengurusan dan jajaran pemuda terdaftar di Karang Taruna 8Vibes RT 08 Sememi.
+                                            </p>
+                                        </div>
+
+                                        {/* BAGAN ORGANISASI VISUAL */}
+                                        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm mb-16">
+                                            <h3 className="text-center font-bold text-red-600 text-sm tracking-wider uppercase mb-8">
+                                                <i className="fa-solid fa-sitemap mr-2"></i> Bagan Kepengurusan Utama
+                                            </h3>
+                                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                                                {data.structure.map((item) => (
+                                                    <div key={item.id} className="p-5 rounded-2xl bg-red-50/50 border border-red-100 flex flex-col justify-between hover:shadow-md transition">
+                                                        <div>
+                                                            <span className="text-xs font-extrabold text-red-600 bg-red-100 px-2.5 py-1 rounded-md uppercase">
+                                                                {item.title}
+                                                            </span>
+                                                            <h4 className="font-bold text-gray-900 text-lg mt-3">{item.name}</h4>
+                                                        </div>
+                                                        <p className="text-xs text-gray-500 font-medium mt-2">{item.role}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* LIST DAFTAR ANGGOTA TERDAFTAR */}
+                                        <div className="space-y-6">
+                                            <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
+                                                <h3 className="text-xl font-bold text-gray-900">
+                                                    Daftar Anggota Resmi ({filteredMembers.length})
+                                                </h3>
+                                                <div className="relative w-full sm:w-72">
+                                                    <i className="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm"></i>
+                                                    <input 
+                                                        type="text" 
+                                                        placeholder="Cari nama / jabatan..."
+                                                        value={searchMember}
+                                                        onChange={(e) => setSearchMember(e.target.value)}
+                                                        className="w-full pl-9 pr-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                                    />
+                                                </div>
+                                            </div>
+
+                                            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                                                {filteredMembers.map((member) => (
+                                                    <div key={member.id} className="bg-white p-4 rounded-2xl border border-gray-200 flex items-center gap-4 shadow-sm hover:border-red-300 transition">
+                                                        <img 
+                                                            src={member.photo} 
+                                                            alt={member.name} 
+                                                            className="w-14 h-14 rounded-full object-cover border border-red-200"
+                                                            onError={(e) => { e.target.src = 'https://placehold.co/100x100/ef4444/ffffff?text=Member'; }}
+                                                        />
+                                                        <div className="flex-1 min-w-0">
+                                                            <h4 className="font-bold text-gray-900 text-sm truncate">{member.name}</h4>
+                                                            <p className="text-xs text-red-600 font-medium truncate">{member.position}</p>
+                                                            <span className="inline-block mt-1 text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md border border-emerald-200">
+                                                                <i className="fa-solid fa-circle text-[6px] mr-1"></i> {member.status}
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* BERITA & UPDATE KEGIATAN */}
+                                <section id="berita" className="py-16 bg-white">
+                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                        <div className="flex flex-col md:flex-row md:items-end justify-between mb-10 gap-4">
+                                            <div>
+                                                <h2 className="text-2xl sm:text-4xl font-extrabold text-gray-900">
+                                                    Berita & Kegiatan RT 08
+                                                </h2>
+                                                <p className="text-gray-600 mt-2 text-sm sm:text-base">
+                                                    Informasi terkini seputar kegiatan warga dan pemuda Kartar 8Vibes.
+                                                </p>
+                                            </div>
+
+                                            {/* Filter Category */}
+                                            <div className="flex flex-wrap gap-2">
+                                                {['Semua', 'Kegiatan RT', 'Kegiatan Kartar', 'Pengumuman Warga'].map((cat) => (
+                                                    <button
+                                                        key={cat}
+                                                        onClick={() => setNewsCategory(cat)}
+                                                        className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition ${
+                                                            newsCategory === cat 
+                                                                ? 'bg-red-600 text-white shadow-sm' 
+                                                                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                                                        }`}
+                                                    >
+                                                        {cat}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        </div>
+
+                                        {/* News Grid */}
+                                        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                                            {filteredNews.map((item) => (
+                                                <article key={item.id} className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm flex flex-col hover:shadow-md transition">
+                                                    <img 
+                                                        src={item.image} 
+                                                        alt={item.title} 
+                                                        className="w-full h-48 object-cover"
+                                                        onError={(e) => { e.target.src = 'https://placehold.co/600x400/ef4444/ffffff?text=Berita'; }}
+                                                    />
+                                                    <div className="p-6 flex-1 flex flex-col justify-between space-y-4">
+                                                        <div>
+                                                            <div className="flex items-center justify-between text-xs text-gray-500 mb-2">
+                                                                <span className="font-semibold text-red-600 bg-red-50 px-2 py-0.5 rounded">{item.category}</span>
+                                                                <span><i className="fa-regular fa-calendar mr-1"></i>{item.date}</span>
+                                                            </div>
+                                                            <h3 className="font-bold text-gray-900 text-lg leading-snug line-clamp-2 hover:text-red-600 transition">
+                                                                {item.title}
+                                                            </h3>
+                                                            <p className="text-gray-600 text-xs mt-2 line-clamp-3">
+                                                                {item.summary}
+                                                            </p>
+                                                        </div>
+                                                        <button 
+                                                            onClick={() => setSelectedNews(item)}
+                                                            className="text-red-600 text-xs font-bold hover:text-red-700 flex items-center gap-1.5 pt-2"
+                                                        >
+                                                            Baca Selengkapnya <i className="fa-solid fa-arrow-right text-[10px]"></i>
+                                                        </button>
+                                                    </div>
+                                                </article>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* GALERI DOKUMENTASI */}
+                                <section id="galeri" className="py-16 bg-gray-50">
+                                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                                        <div className="text-center max-w-3xl mx-auto mb-10">
+                                            <h2 className="text-2xl sm:text-4xl font-extrabold text-gray-900">
+                                                Galeri Dokumentasi Kegiatan
+                                            </h2>
+                                            <p className="text-gray-600 mt-2 text-sm sm:text-base">
+                                                Momen kebersamaan seluruh aktivitas warga RT 08 Sememi dan Karang Taruna.
+                                            </p>
+                                        </div>
+
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                                            {filteredGallery.map((img) => (
+                                                <div 
+                                                    key={img.id} 
+                                                    onClick={() => setSelectedImage(img)}
+                                                    className="group relative rounded-2xl overflow-hidden cursor-pointer bg-gray-200 aspect-square shadow-sm"
+                                                >
+                                                    <img 
+                                                        src={img.url} 
+                                                        alt={img.title} 
+                                                        className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                                                        onError={(e) => { e.target.src = 'https://placehold.co/400x400/ef4444/ffffff?text=Galeri'; }}
+                                                    />
+                                                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition p-4 flex flex-col justify-end text-white">
+                                                        <span className="text-[10px] bg-red-600 px-2 py-0.5 rounded font-semibold w-max mb-1">{img.category}</span>
+                                                        <h4 className="font-bold text-sm leading-tight">{img.title}</h4>
+                                                        <p className="text-[10px] text-gray-300 mt-1">{img.date}</p>
+                                                    </div>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* DONASI DANA */}
+                                <section id="donasi" className="py-16 bg-white">
+                                    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+                                        <div className="bg-gradient-to-br from-red-600 to-red-700 rounded-3xl text-white p-8 sm:p-12 shadow-2xl relative overflow-hidden">
+                                            <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-center relative z-10">
+                                                <div className="md:col-span-7 space-y-4">
+                                                    <span className="bg-white/20 text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider">
+                                                        <i className="fa-solid fa-heart mr-1.5"></i> Dukung Kegiatan Kartar
+                                                    </span>
+                                                    <h2 className="text-2xl sm:text-3xl font-black">
+                                                        Donasi & Partisipasi Warga RT 08
+                                                    </h2>
+                                                    <p className="text-red-100 text-sm leading-relaxed">
+                                                        {data.donation.note}
+                                                    </p>
+
+                                                    <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 space-y-2">
+                                                        <div className="text-xs text-red-100">Akun DANA Resmi:</div>
+                                                        <div className="text-xl font-extrabold tracking-wider">{data.donation.accountNumber}</div>
+                                                        <div className="text-xs text-red-200">a.n. {data.donation.accountName}</div>
+                                                    </div>
+
+                                                    <a 
+                                                        href={`https://wa.me/6281234567890?text=Halo%20Pengurus%20Kartar%208Vibes,%20saya%20sudah%20melakukan%20donasi%20melalui%20DANA.`}
+                                                        target="_blank"
+                                                        rel="noreferrer"
+                                                        className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-3 rounded-xl text-sm transition shadow"
+                                                    >
+                                                        <i className="fa-brands fa-whatsapp text-lg"></i> Konfirmasi Donasi via WA
+                                                    </a>
+                                                </div>
+
+                                                <div className="md:col-span-5 flex flex-col items-center justify-center bg-white p-6 rounded-2xl text-gray-900 text-center shadow-lg">
+                                                    <h4 className="font-bold text-xs uppercase text-red-600 mb-2">Scan QR DANA / QRIS</h4>
+                                                    <img 
+                                                        src={data.donation.qrisUrl} 
+                                                        alt="QRIS Donasi" 
+                                                        className="w-44 h-44 object-contain"
+                                                        onError={(e) => { e.target.src = 'https://placehold.co/200x200/ef4444/ffffff?text=QR+DANA'; }}
+                                                    />
+                                                    <p className="text-[10px] text-gray-500 mt-2">Bisa di-scan menggunakan DANA / Mobile Banking</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+
+                                {/* KOTAK SARAN & MASUKAN */}
+                                <section id="saran" className="py-16 bg-gray-50">
+                                    <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+                                        <div className="bg-white p-8 sm:p-10 rounded-3xl border border-gray-200 shadow-sm">
+                                            <div className="text-center mb-8">
+                                                <h2 className="text-2xl font-black text-gray-900">Kotak Saran & Masukan Warga</h2>
+                                                <p className="text-sm text-gray-600 mt-1">Bantu Karang Taruna 8Vibes Sememi menjadi lebih baik melalui aspirasi Anda.</p>
+                                            </div>
+
+                                            {feedbackSuccess && (
+                                                <div className="mb-6 p-4 rounded-2xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-sm font-semibold flex items-center gap-3">
+                                                    <i className="fa-solid fa-circle-check text-emerald-600 text-lg"></i>
+                                                    Terima kasih! Saran dan masukan Anda berhasil dikirimkan ke pengurus.
+                                                </div>
+                                            )}
+
+                                            <form onSubmit={handleSendFeedback} className="space-y-4">
+                                                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-700 mb-1">Nama (Opsional / Anonim)</label>
+                                                        <input 
+                                                            type="text" 
+                                                            placeholder="Contoh: Bpk. Ahmad" 
+                                                            value={feedbackInput.name}
+                                                            onChange={(e) => setFeedbackInput({...feedbackInput, name: e.target.value})}
+                                                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                                        />
+                                                    </div>
+                                                    <div>
+                                                        <label className="block text-xs font-bold text-gray-700 mb-1">No. WhatsApp (Opsional)</label>
+                                                        <input 
+                                                            type="text" 
+                                                            placeholder="0812xxxx" 
+                                                            value={feedbackInput.phone}
+                                                            onChange={(e) => setFeedbackInput({...feedbackInput, phone: e.target.value})}
+                                                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                                        />
+                                                    </div>
+                                                </div>
+                                                <div>
+                                                    <label className="block text-xs font-bold text-gray-700 mb-1">Pesan / Masukan Anda <span className="text-red-500">*</span></label>
+                                                    <textarea 
+                                                        rows="4" 
+                                                        required
+                                                        placeholder="Tuliskan ide, masukan, atau kritik membangun..." 
+                                                        value={feedbackInput.message}
+                                                        onChange={(e) => setFeedbackInput({...feedbackInput, message: e.target.value})}
+                                                        className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                                    ></textarea>
+                                                </div>
+                                                <button 
+                                                    type="submit" 
+                                                    className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 rounded-xl shadow transition text-sm"
+                                                >
+                                                    <i className="fa-solid fa-paper-plane mr-2"></i> Kirim Masukan Warga
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </section>
+                            </div>
+                        ) : (
+                            <AdminPanel data={data} setData={setData} />
+                        )}
+                    </main>
+
+                    {/* MODAL READ NEWS */}
+                    {selectedNews && (
+                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+                            <div className="bg-white rounded-3xl max-w-2xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar p-6 sm:p-8 space-y-4">
+                                <div className="flex justify-between items-start">
+                                    <span className="text-xs font-extrabold text-red-600 bg-red-50 px-3 py-1 rounded-full">{selectedNews.category}</span>
+                                    <button onClick={() => setSelectedNews(null)} className="text-gray-400 hover:text-gray-700">
+                                        <i className="fa-solid fa-xmark text-xl"></i>
+                                    </button>
+                                </div>
+                                <h3 className="text-xl sm:text-2xl font-black text-gray-900 leading-snug">{selectedNews.title}</h3>
+                                <div className="text-xs text-gray-500 flex items-center gap-4 border-b pb-4">
+                                    <span><i className="fa-regular fa-user mr-1"></i>{selectedNews.author}</span>
+                                    <span><i className="fa-regular fa-calendar mr-1"></i>{selectedNews.date}</span>
+                                </div>
+                                <img src={selectedNews.image} alt={selectedNews.title} className="w-full h-64 object-cover rounded-2xl" />
+                                <p className="text-gray-700 text-sm leading-relaxed whitespace-pre-line">{selectedNews.content}</p>
+                                <div className="pt-4 border-t flex justify-end">
+                                    <button onClick={() => setSelectedNews(null)} className="bg-gray-100 hover:bg-gray-200 text-gray-800 font-bold px-5 py-2 rounded-xl text-xs">
+                                        Tutup
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* MODAL GALLERY LIGHTBOX */}
+                    {selectedImage && (
+                        <div className="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" onClick={() => setSelectedImage(null)}>
+                            <div className="relative max-w-4xl w-full" onClick={(e) => e.stopPropagation()}>
+                                <img src={selectedImage.url} alt={selectedImage.title} className="max-h-[80vh] mx-auto rounded-2xl object-contain shadow-2xl" />
+                                <div className="mt-4 text-center text-white">
+                                    <h4 className="font-bold text-lg">{selectedImage.title}</h4>
+                                    <p className="text-xs text-gray-300">{selectedImage.category} • {selectedImage.date}</p>
+                                </div>
+                                <button onClick={() => setSelectedImage(null)} className="absolute -top-10 right-0 text-white hover:text-red-400 text-2xl font-bold">
+                                    <i className="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* LOGIN ADMIN MODAL */}
+                    {showAdminLoginModal && (
+                        <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+                            <div className="bg-white rounded-3xl max-w-md w-full p-8 shadow-2xl space-y-6">
+                                <div className="text-center space-y-2">
+                                    <div className="w-12 h-12 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto text-xl">
+                                        <i className="fa-solid fa-user-lock"></i>
+                                    </div>
+                                    <h3 className="text-2xl font-black text-gray-900">Login Admin Kartar</h3>
+                                    <p className="text-xs text-gray-500">Masukkan kata sandi pengurus untuk mengakses panel kendali CMS.</p>
+                                </div>
+
+                                {loginError && (
+                                    <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-red-600 text-xs font-semibold text-center">
+                                        {loginError}
+                                    </div>
+                                )}
+
+                                <form onSubmit={handleAdminLogin} className="space-y-4">
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Password Admin</label>
+                                        <input 
+                                            type="password" 
+                                            placeholder="Masukkan password..." 
+                                            value={adminPasswordInput}
+                                            onChange={(e) => setAdminPasswordInput(e.target.value)}
+                                            className="w-full px-4 py-2.5 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                            autoFocus
+                                        />
+                                        <span className="text-[10px] text-gray-400 mt-1 block">* Password default: <code className="bg-gray-100 px-1 rounded text-red-600">admin123</code></span>
+                                    </div>
+
+                                    <div className="flex gap-3 pt-2">
+                                        <button 
+                                            type="button" 
+                                            onClick={() => setShowAdminLoginModal(false)}
+                                            className="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 font-bold py-2.5 rounded-xl text-xs"
+                                        >
+                                            Batal
+                                        </button>
+                                        <button 
+                                            type="submit" 
+                                            className="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2.5 rounded-xl text-xs shadow"
+                                        >
+                                            Masuk Panel
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* FOOTER */}
+                    <footer className="bg-gray-900 text-white py-12 border-t border-gray-800">
+                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                            <div className="flex flex-col md:flex-row justify-between items-center gap-6">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-bold text-lg">8V</div>
+                                    <div>
+                                        <h4 className="font-bold text-base">Karang Taruna 8Vibes Sememi</h4>
+                                        <p className="text-xs text-gray-400">RT 08 Sememi, Surabaya - Jawa Timur</p>
+                                    </div>
+                                </div>
+                                <div className="text-xs text-gray-400 text-center md:text-right">
+                                    &copy; {new Date().getFullYear()} Karang Taruna 8Vibes Sememi. All Rights Reserved.
+                                </div>
+                            </div>
+                        </div>
+                    </footer>
+                </div>
+            );
+        }
+
+        function AdminPanel({ data, setData }) {
+            const [activeTab, setActiveTab] = useState('profile');
+
+            // Form Temp States for Admin Modals / Adding
+            const [newMember, setNewMember] = useState({ name: '', position: '', status: 'Aktif', photo: '', phone: '' });
+            const [newNews, setNewNews] = useState({ title: '', category: 'Kegiatan RT', date: '', author: 'Admin Kartar', summary: '', content: '', image: '' });
+            const [newGallery, setNewGallery] = useState({ title: '', category: 'Acara Warga', date: '', url: '' });
+
+            const saveFirebaseNode = async (path, value, successMessage) => {
+                try {
+                    await db.ref(path).set(value);
+                    if (successMessage) window.alert(successMessage);
+                    return true;
+                } catch (error) {
+                    console.error(`Gagal menyimpan ${path} ke Firebase:`, error);
+                    window.alert('Gagal menyimpan: ' + error.message);
+                    return false;
+                }
+            };
+
+            // Reset Data Function
+            const handleResetData = async () => {
+                if (window.confirm('Apakah Anda yakin ingin mengembalikan seluruh data ke default awal?')) {
+                    await saveFirebaseNode('kartar_data', DEFAULT_DATA);
+                }
+            };
+
+            // Handlers Profile & Donasi Update
+            const handleUpdateProfile = async (e) => {
+                e.preventDefault();
+                await saveFirebaseNode('kartar_data/profile', data.profile, 'Profil berhasil diperbarui secara Real-Time!');
+            };
+
+            const handleUpdateDonation = async (e) => {
+                e.preventDefault();
+                await saveFirebaseNode('kartar_data/donation', data.donation, 'Info Donasi berhasil disimpan!');
+            };
+
+            // Member CRUD
+            const handleAddMember = async (e) => {
+                e.preventDefault();
+                if (!newMember.name || !newMember.position) return;
+                const updated = [
+                    ...data.members,
+                    {
+                        id: 'm_' + Date.now(),
+                        ...newMember,
+                        photo: newMember.photo || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200'
+                    }
+                ];
+                if (await saveFirebaseNode('kartar_data/members', updated)) {
+                    setNewMember({ name: '', position: '', status: 'Aktif', photo: '', phone: '' });
+                }
+            };
+
+            const handleDeleteMember = async (id) => {
+                if (window.confirm('Hapus anggota ini?')) {
+                    const updated = data.members.filter(m => m.id !== id);
+                    await saveFirebaseNode('kartar_data/members', updated);
+                }
+            };
+
+            // News CRUD
+            const handleAddNews = async (e) => {
+                e.preventDefault();
+                if (!newNews.title || !newNews.content) return;
+                const item = {
+                    id: 'n_' + Date.now(),
+                    ...newNews,
+                    date: newNews.date || new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }),
+                    image: newNews.image || 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?auto=format&fit=crop&q=80&w=600'
+                };
+                if (await saveFirebaseNode('kartar_data/news', [item, ...data.news])) {
+                    setNewNews({ title: '', category: 'Kegiatan RT', date: '', author: 'Admin Kartar', summary: '', content: '', image: '' });
+                }
+            };
+
+            const handleDeleteNews = async (id) => {
+                if (window.confirm('Hapus berita ini?')) {
+                    const updated = data.news.filter(n => n.id !== id);
+                    await saveFirebaseNode('kartar_data/news', updated);
+                }
+            };
+
+            // Gallery CRUD
+            const handleAddGallery = async (e) => {
+                e.preventDefault();
+                if (!newGallery.title || !newGallery.url) return;
+                const item = {
+                    id: 'g_' + Date.now(),
+                    ...newGallery,
+                    date: newGallery.date || new Date().toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' })
+                };
+                if (await saveFirebaseNode('kartar_data/gallery', [item, ...data.gallery])) {
+                    setNewGallery({ title: '', category: 'Acara Warga', date: '', url: '' });
+                }
+            };
+
+            const handleDeleteGallery = async (id) => {
+                if (window.confirm('Hapus foto galeri ini?')) {
+                    const updated = data.gallery.filter(g => g.id !== id);
+                    await saveFirebaseNode('kartar_data/gallery', updated);
+                }
+            };
+
+            // Feedback Delete
+            const handleDeleteFeedback = async (id) => {
+                const updated = data.feedbacks.filter(f => f.id !== id);
+                await saveFirebaseNode('kartar_data/feedbacks', updated);
+            };
+
+            return (
+                <div className="py-8 bg-gray-100 min-h-screen">
+                    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                        {/* Admin Top Header */}
+                        <div className="bg-white p-6 rounded-3xl border border-gray-200 shadow-sm mb-8 flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+                            <div>
+                                <h2 className="text-2xl font-black text-gray-900 flex items-center gap-2">
+                                    <i className="fa-solid fa-sliders text-red-600"></i> Panel Kontrol Real-Time CMS
+                                </h2>
+                                <p className="text-xs text-gray-500 mt-1">
+                                    Perubahan data di sini langsung terupdate real-time di seluruh pengunjung web.
+                                </p>
+                            </div>
+                            <button 
+                                onClick={handleResetData}
+                                className="bg-red-50 hover:bg-red-100 text-red-600 border border-red-200 text-xs font-bold px-4 py-2 rounded-xl transition"
+                            >
+                                <i className="fa-solid fa-rotate-left mr-1.5"></i> Reset Data ke Default
+                            </button>
+                        </div>
+
+                        {/* CMS Navigation Tabs */}
+                        <div className="flex overflow-x-auto custom-scrollbar gap-2 mb-6 pb-2">
+                            {[
+                                { id: 'profile', label: 'Profil & Sambutan', icon: 'fa-id-card' },
+                                { id: 'members', label: 'Anggota Resmi', icon: 'fa-users' },
+                                { id: 'news', label: 'Kelola Berita', icon: 'fa-newspaper' },
+                                { id: 'gallery', label: 'Kelola Galeri', icon: 'fa-images' },
+                                { id: 'donation', label: 'Akun DANA', icon: 'fa-wallet' },
+                                { id: 'feedbacks', label: 'Masukan Warga', icon: 'fa-comments' }
+                            ].map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`px-4 py-2.5 rounded-xl text-xs font-bold whitespace-nowrap transition flex items-center gap-2 ${
+                                        activeTab === tab.id
+                                            ? 'bg-red-600 text-white shadow-md'
+                                            : 'bg-white text-gray-600 hover:bg-gray-50 border border-gray-200'
+                                    }`}
+                                >
+                                    <i className={`fa-solid ${tab.icon}`}></i>
+                                    {tab.label}
+                                </button>
+                            ))}
+                        </div>
+
+                        {/* TAB CONTENTS */}
+                        <div className="bg-white p-6 sm:p-8 rounded-3xl border border-gray-200 shadow-sm">
+                            {/* TAB 1: PROFIL & SAMBUTAN */}
+                            {activeTab === 'profile' && (
+                                <form onSubmit={handleUpdateProfile} className="space-y-6 max-w-3xl">
+                                    <h3 className="font-bold text-lg text-gray-900 border-b pb-3">Edit Sambutan Ketua & Informasi Web</h3>
+                                    
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-700 mb-1">Nama Organisasi</label>
+                                            <input 
+                                                type="text" 
+                                                value={data.profile.title}
+                                                onChange={(e) => setData({...data, profile: {...data.profile, title: e.target.value}})}
+                                                className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-700 mb-1">Sub Title / Slogan</label>
+                                            <input 
+                                                type="text" 
+                                                value={data.profile.subTitle}
+                                                onChange={(e) => setData({...data, profile: {...data.profile, subTitle: e.target.value}})}
+                                                className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-700 mb-1">Nama Ketua Karang Taruna</label>
+                                            <input 
+                                                type="text" 
+                                                value={data.profile.ketuaName}
+                                                onChange={(e) => setData({...data, profile: {...data.profile, ketuaName: e.target.value}})}
+                                                className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                            />
+                                        </div>
+                                        <div>
+                                            <label className="block text-xs font-bold text-gray-700 mb-1">URL Foto Ketua</label>
+                                            <input 
+                                                type="text" 
+                                                value={data.profile.ketuaPhoto}
+                                                onChange={(e) => setData({...data, profile: {...data.profile, ketuaPhoto: e.target.value}})}
+                                                className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Teks Sambutan Pembuka</label>
+                                        <textarea 
+                                            rows="4"
+                                            value={data.profile.welcomeMessage}
+                                            onChange={(e) => setData({...data, profile: {...data.profile, welcomeMessage: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        ></textarea>
+                                    </div>
+
+                                    <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
+                                        Simpan Perubahan
+                                    </button>
+                                </form>
+                            )}
+
+                            {/* TAB 2: ANGGOTA RESMI */}
+                            {activeTab === 'members' && (
+                                <div className="space-y-8">
+                                    <form onSubmit={handleAddMember} className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                                        <h4 className="font-bold text-sm text-gray-900">Tambah Anggota Resmi Baru</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Nama Lengkap *" 
+                                                required
+                                                value={newMember.name}
+                                                onChange={(e) => setNewMember({...newMember, name: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="Jabatan *" 
+                                                required
+                                                value={newMember.position}
+                                                onChange={(e) => setNewMember({...newMember, position: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="URL Foto (Opsional)" 
+                                                value={newMember.photo}
+                                                onChange={(e) => setNewMember({...newMember, photo: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                        </div>
+                                        <button type="submit" className="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow">
+                                            <i className="fa-solid fa-plus mr-1"></i> Tambah Anggota
+                                        </button>
+                                    </form>
+
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full text-left text-xs">
+                                            <thead className="bg-gray-100 text-gray-700 uppercase">
+                                                <tr>
+                                                    <th className="p-3">Foto</th>
+                                                    <th className="p-3">Nama</th>
+                                                    <th className="p-3">Jabatan</th>
+                                                    <th className="p-3">Status</th>
+                                                    <th className="p-3 text-right">Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-gray-200">
+                                                {data.members.map((m) => (
+                                                    <tr key={m.id} className="hover:bg-gray-50">
+                                                        <td className="p-3">
+                                                            <img src={m.photo} alt={m.name} className="w-8 h-8 rounded-full object-cover" />
+                                                        </td>
+                                                        <td className="p-3 font-bold">{m.name}</td>
+                                                        <td className="p-3 text-gray-600">{m.position}</td>
+                                                        <td className="p-3"><span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded font-semibold">{m.status}</span></td>
+                                                        <td className="p-3 text-right">
+                                                            <button onClick={() => handleDeleteMember(m.id)} className="text-red-600 hover:text-red-800 font-bold">
+                                                                Hapus
+                                                            </button>
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 3: KELOLA BERITA */}
+                            {activeTab === 'news' && (
+                                <div className="space-y-8">
+                                    <form onSubmit={handleAddNews} className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                                        <h4 className="font-bold text-sm text-gray-900">Tambah Artikel Berita Baru</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Judul Berita *" 
+                                                required
+                                                value={newNews.title}
+                                                onChange={(e) => setNewNews({...newNews, title: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <select 
+                                                value={newNews.category}
+                                                onChange={(e) => setNewNews({...newNews, category: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            >
+                                                <option value="Kegiatan RT">Kegiatan RT</option>
+                                                <option value="Kegiatan Kartar">Kegiatan Kartar</option>
+                                                <option value="Pengumuman Warga">Pengumuman Warga</option>
+                                            </select>
+                                            <input 
+                                                type="text" 
+                                                placeholder="Ringkasan Singkat" 
+                                                value={newNews.summary}
+                                                onChange={(e) => setNewNews({...newNews, summary: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="URL Gambar Berita" 
+                                                value={newNews.image}
+                                                onChange={(e) => setNewNews({...newNews, image: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                        </div>
+                                        <textarea 
+                                            rows="3" 
+                                            placeholder="Isi Berita Lengkap *" 
+                                            required
+                                            value={newNews.content}
+                                            onChange={(e) => setNewNews({...newNews, content: e.target.value})}
+                                            className="w-full px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                        ></textarea>
+                                        <button type="submit" className="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow">
+                                            <i className="fa-solid fa-plus mr-1"></i> Publikasikan Berita
+                                        </button>
+                                    </form>
+
+                                    <div className="space-y-3">
+                                        {data.news.map((n) => (
+                                            <div key={n.id} className="p-4 border rounded-2xl flex justify-between items-center bg-white shadow-sm">
+                                                <div className="flex items-center gap-4">
+                                                    <img src={n.image} alt={n.title} className="w-12 h-12 rounded-xl object-cover" />
+                                                    <div>
+                                                        <h5 className="font-bold text-xs text-gray-900">{n.title}</h5>
+                                                        <span className="text-[10px] text-gray-500">{n.category} • {n.date}</span>
+                                                    </div>
+                                                </div>
+                                                <button onClick={() => handleDeleteNews(n.id)} className="text-red-600 text-xs font-bold hover:underline">
+                                                    Hapus
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 4: KELOLA GALERI */}
+                            {activeTab === 'gallery' && (
+                                <div className="space-y-8">
+                                    <form onSubmit={handleAddGallery} className="bg-gray-50 p-5 rounded-2xl border border-gray-200 space-y-4">
+                                        <h4 className="font-bold text-sm text-gray-900">Tambah Foto Dokumentasi</h4>
+                                        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                                            <input 
+                                                type="text" 
+                                                placeholder="Judul / Momen Foto *" 
+                                                required
+                                                value={newGallery.title}
+                                                onChange={(e) => setNewGallery({...newGallery, title: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="Kategori (cth: Acara Warga)" 
+                                                value={newGallery.category}
+                                                onChange={(e) => setNewGallery({...newGallery, category: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                            <input 
+                                                type="text" 
+                                                placeholder="URL Image *" 
+                                                required
+                                                value={newGallery.url}
+                                                onChange={(e) => setNewGallery({...newGallery, url: e.target.value})}
+                                                className="px-3 py-2 text-xs rounded-xl border border-gray-300"
+                                            />
+                                        </div>
+                                        <button type="submit" className="bg-red-600 text-white font-bold px-4 py-2 rounded-xl text-xs shadow">
+                                            <i className="fa-solid fa-plus mr-1"></i> Upload Foto
+                                        </button>
+                                    </form>
+
+                                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                                        {data.gallery.map((g) => (
+                                            <div key={g.id} className="relative group border rounded-2xl overflow-hidden bg-gray-100">
+                                                <img src={g.url} alt={g.title} className="w-full h-32 object-cover" />
+                                                <div className="p-2 text-[11px] font-bold truncate">{g.title}</div>
+                                                <button 
+                                                    onClick={() => handleDeleteGallery(g.id)}
+                                                    className="absolute top-2 right-2 bg-red-600 text-white w-6 h-6 rounded-full flex items-center justify-center text-xs shadow"
+                                                >
+                                                    <i className="fa-solid fa-trash"></i>
+                                                </button>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* TAB 5: AKUN DONASI */}
+                            {activeTab === 'donation' && (
+                                <form onSubmit={handleUpdateDonation} className="space-y-4 max-w-2xl">
+                                    <h3 className="font-bold text-lg text-gray-900 border-b pb-3">Edit Informasi Rekening DANA</h3>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Nomor Akun DANA</label>
+                                        <input 
+                                            type="text" 
+                                            value={data.donation.accountNumber}
+                                            onChange={(e) => setData({...data, donation: {...data.donation, accountNumber: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Atas Nama Pemilik DANA</label>
+                                        <input 
+                                            type="text" 
+                                            value={data.donation.accountName}
+                                            onChange={(e) => setData({...data, donation: {...data.donation, accountName: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-xs font-bold text-gray-700 mb-1">Catatan Himbauan Donasi</label>
+                                        <textarea 
+                                            rows="3"
+                                            value={data.donation.note}
+                                            onChange={(e) => setData({...data, donation: {...data.donation, note: e.target.value}})}
+                                            className="w-full px-4 py-2 text-sm rounded-xl border border-gray-300 focus:outline-none focus:border-red-500"
+                                        ></textarea>
+                                    </div>
+                                    <button type="submit" className="bg-red-600 hover:bg-red-700 text-white font-bold px-6 py-2.5 rounded-xl text-xs shadow transition">
+                                        Simpan Informasi Donasi
+                                    </button>
+                                </form>
+                            )}
+
+                            {/* TAB 6: MASUKAN WARGA */}
+                            {activeTab === 'feedbacks' && (
+                                <div className="space-y-4">
+                                    <h3 className="font-bold text-lg text-gray-900 border-b pb-3">Daftar Masukan / Saran Masuk dari Warga</h3>
+                                    {data.feedbacks.length === 0 ? (
+                                        <p className="text-xs text-gray-500 italic">Belum ada saran atau masukan dari warga.</p>
+                                    ) : (
+                                        <div className="space-y-3">
+                                            {data.feedbacks.map((fb) => (
+                                                <div key={fb.id} className="p-4 rounded-2xl bg-gray-50 border border-gray-200 flex justify-between items-start gap-4">
+                                                    <div className="space-y-1">
+                                                        <div className="flex items-center gap-2">
+                                                            <span className="font-bold text-xs text-gray-900">{fb.name}</span>
+                                                            <span className="text-[10px] text-gray-400">• {fb.date} • WA: {fb.phone}</span>
+                                                        </div>
+                                                        <p className="text-xs text-gray-700 italic">"{fb.text}"</p>
+                                                    </div>
+                                                    <button onClick={() => handleDeleteFeedback(fb.id)} className="text-red-600 hover:text-red-800 text-xs font-bold">
+                                                        Hapus
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
