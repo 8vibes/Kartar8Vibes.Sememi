@@ -94,12 +94,12 @@
                 }
             },
             structure: [
-                { id: "1", title: "Pelindung", name: "Bpk. H. Ahmad Sugeng", role: "Ketua RT 08 Sememi" },
-                { id: "2", title: "Penasehat", name: "Bpk. Bambang Wijaya", role: "Tokoh Masyarakat" },
-                { id: "3", title: "Ketua Kartar", name: "Rizky Pratama", role: "Koordinator Utama" },
-                { id: "4", title: "Wakil Ketua", name: "Dinda Lestari", role: "Pendamping Operasional" },
-                { id: "5", title: "Sekretaris", name: "Siti Rahmawati", role: "Administrasi & Kebijakan" },
-                { id: "6", title: "Bendahara", name: "Bagus Setiawan", role: "Keuangan & Alokasi Dana" }
+                { id: "1", title: "Pelindung", name: "Bpk. Supriyadi", role: "Ketua RT 08 Sememi" },
+                { id: "2", title: "Penasehat", name: "Ragil", role: "Penasihat Kartar 8Vibes" },
+                { id: "3", title: "Ketua Kartar", name: "Affan", role: "Koordinator Utama" },
+                { id: "4", title: "Wakil Ketua", name: "Gondrong", role: "Pendamping Operasional" },
+                { id: "5", title: "Sekretaris", name: "Olip", role: "Administrasi & Kebijakan" },
+                { id: "6", title: "Bendahara", name: "Bintang", role: "Keuangan & Alokasi Dana" }
             ],
             members: [
                 { id: "m1", name: "Rizky Pratama", position: "Ketua Umum", status: "Aktif", photo: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&q=80&w=200", phone: "081234567890" },
@@ -150,8 +150,8 @@
             donation: {
                 accountName: "Karang Taruna 8Vibes Sememi",
                 accountNumber: "0812-3456-7890",
-                note: "Gunakan fitur DANA ini untuk berpartisipasi dalam program kebersihan, sosial, dan kegiatan pemuda RT 08 Sememi.",
-                qrisUrl: "https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=DANA-8VIBES-SEMEMI-RT08"
+                note: "Bisa menggunakan metode apa pun untuk berpartisipasi dalam program sosial dan kegiatan pemuda RT 08 Sememi. Scan kode QR, Anda akan terhubung ke Sosiabuzz 8Vibes.",
+                qrisUrl: "./https_sociabuzz_com_8vibes_tribe.png"
             },
             feedbacks: [
                 { id: "fb1", name: "Bpk. Mulyono", phone: "081399881122", text: "Mohon untuk kegiatan olahraga malam suara musik dibatasi sampai jam 10 malam ya dek, terima kasih.", date: "01 Oktober 2026" },
@@ -195,6 +195,10 @@
                             news: val.news || [],
                             gallery: val.gallery || []
                         };
+                        if (normalizedData.donation.note === "Gunakan fitur DANA ini untuk berpartisipasi dalam program kebersihan, sosial, dan kegiatan pemuda RT 08 Sememi.") {
+                            normalizedData.donation.note = DEFAULT_DATA.donation.note;
+                        }
+                        normalizedData.donation.qrisUrl = DEFAULT_DATA.donation.qrisUrl;
                         setData(normalizedData);
                     }
                 };
@@ -269,9 +273,12 @@
                     <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-red-100 shadow-sm">
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
                             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setViewMode('public')}>
-                                <div className="w-12 h-12 rounded-full bg-gradient-to-tr from-red-600 to-red-500 flex items-center justify-center text-white font-black text-xl shadow-md border-2 border-white">
-                                    8V
-                                </div>
+                                <img
+                                    src="./logo-karang-taruna.png"
+                                    alt="Logo 8Vibes Sememi"
+                                    className="w-12 h-12 rounded-full object-cover shadow-md border-2 border-white"
+                                    onError={(e) => { e.target.src = 'https://placehold.co/100x100/ef4444/ffffff?text=8V'; }}
+                                />
                                 <div>
                                     <h1 className="font-extrabold text-lg sm:text-xl text-gray-900 leading-tight">
                                         8VIBES <span className="text-red-600">SEMEMI</span>
@@ -584,20 +591,18 @@
                                                         {data.donation.note}
                                                     </p>
 
-                                                    <div className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 space-y-2">
-                                                        <div className="text-xs text-red-100">Akun DANA Resmi:</div>
-                                                        <div className="text-xl font-extrabold tracking-wider">{data.donation.accountNumber}</div>
-                                                        <div className="text-xs text-red-200">a.n. {data.donation.accountName}</div>
+                                                    <div
+                                                        className="bg-white/10 backdrop-blur-md p-4 rounded-2xl border border-white/20 flex items-center justify-center text-center cursor-pointer"
+                                                        onClick={() => navigator.clipboard && navigator.clipboard.writeText(data.donation.accountNumber)}
+                                                        title="Klik untuk salin nomor rekening"
+                                                    >
+                                                        <div className="flex flex-col items-center">
+                                                            <div className="text-xs text-red-100">KARANG TARUNA RT 08 SEMEMI</div>
+                                                            <div className="text-xl font-extrabold tracking-wider">8VIBES SEMEMI</div>
+                                                            <div className="text-xs text-red-200">TERIMA KASIH</div>
+                                                        </div>
                                                     </div>
 
-                                                    <a 
-                                                        href={`https://wa.me/6281234567890?text=Halo%20Pengurus%20Kartar%208Vibes,%20saya%20sudah%20melakukan%20donasi%20melalui%20DANA.`}
-                                                        target="_blank"
-                                                        rel="noreferrer"
-                                                        className="inline-flex items-center gap-2 bg-emerald-500 hover:bg-emerald-600 text-white font-bold px-5 py-3 rounded-xl text-sm transition shadow"
-                                                    >
-                                                        <i className="fa-brands fa-whatsapp text-lg"></i> Konfirmasi Donasi via WA
-                                                    </a>
                                                 </div>
 
                                                 <div className="md:col-span-5 flex flex-col items-center justify-center bg-white p-6 rounded-2xl text-gray-900 text-center shadow-lg">
@@ -606,7 +611,6 @@
                                                         src={data.donation.qrisUrl} 
                                                         alt="QRIS Donasi" 
                                                         className="w-44 h-44 object-contain"
-                                                        onError={(e) => { e.target.src = 'https://placehold.co/200x200/ef4444/ffffff?text=QR+DANA'; }}
                                                     />
                                                     <p className="text-[10px] text-gray-500 mt-2">Bisa di-scan menggunakan DANA / Mobile Banking</p>
                                                 </div>
@@ -780,7 +784,7 @@
                         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                             <div className="flex flex-col md:flex-row justify-between items-center gap-6">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-full bg-red-600 flex items-center justify-center font-bold text-lg">8V</div>
+                                    <img src="./logo-karang-taruna.png" alt="Logo 8Vibes Sememi" className="w-10 h-10 rounded-full object-cover" />
                                     <div>
                                         <h4 className="font-bold text-base">Karang Taruna 8Vibes Sememi</h4>
                                         <p className="text-xs text-gray-400">RT 08 Sememi, Surabaya - Jawa Timur</p>
